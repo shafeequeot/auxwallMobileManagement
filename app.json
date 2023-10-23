@@ -1,30 +1,41 @@
 {
   "expo": {
-    "name": "auxWallMobile",
+    "name": "AuxWall",
     "slug": "auxWallMobile",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "style": {
+      "backgroundColor": "#323545"
+    },
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splashv2.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#f5fcfe"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.auxwall.gymapp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "backgroundColor": "#2f3241"
+      },
+      "package": "com.auxwall.gymapp",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "68974ad4-5aee-4d43-a5f1-8c152b217d47"
+      }
     }
   }
 }
