@@ -1,16 +1,14 @@
 import { View, Text, ScrollView, TouchableOpacity, RefreshControl, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import RevenueCard from '../components/home/RevenueCard'
 import WalletCard from '../components/home/WalletCard'
 import TodaysIncome from '../components/home/TodaysIncome'
 import CourseCount from '../components/home/CourseCount'
-import { color } from '../utility/color'
 import TabelSection from '../components/home/TabelSection'
 import { Ionicons } from '@expo/vector-icons'
 import moment from 'moment'
 import { headerApi } from '../utility/headerApi';
 import axios from 'axios'
-import { SafeAreaView } from 'react-native-safe-area-context'
 
 const HomeScreen = ({ navigation }) => {
 
@@ -18,7 +16,6 @@ const HomeScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false)
   const [loadAgain, setLoadAgain] = useState(false)
   const [data, setData] = useState({})
-  const [currentMonthMembers, setCurrentMonthMembers] = useState([])
 
   const dateHandle = (action) => {
     if (action == "add") setMonth((prev) => moment(prev, "MM-YYYY").add(1, 'month').format("MM-YYYY"))
@@ -35,17 +32,8 @@ const HomeScreen = ({ navigation }) => {
         if(companyId) response = await axios.get(`${endPoint}/dashboard/${companyId}/${month}`, headers);
         else throw new Error("choose a club from club feild")
         const responseData = response?.data?.data || {};
-        const { subscriptions = [] } = responseData;
-  
         setData({ ...responseData });
-        setCurrentMonthMembers(
-          subscriptions.map(item => {
-            const members = item.members.filter(log =>
-              moment(log.membershipFrom).startOf().isSame(moment(month, "MM-YYYY").startOf('month'), 'month')
-            );
-            return { membershipName: item.membershipName, members };
-          })
-        );
+       
       } catch (error) {
         Alert.alert(
           'Please try again!',
@@ -73,7 +61,6 @@ const HomeScreen = ({ navigation }) => {
     fetchData();
 
   }, [loadAgain, month])
-
   return (
 
     <ScrollView refreshControl={
@@ -141,15 +128,16 @@ const HomeScreen = ({ navigation }) => {
 
       <ScrollView horizontal={true} className="bg-white p-2 rounded">
         {
-          currentMonthMembers?.map((course, i) => (
-            <CourseCount key={i} Label={course?.membershipName} Count={course?.members?.length} Color={color.colorArray[2 + i]} />
+          data?.activeSubscriptions?.map((course, i) => (
+            <CourseCount key={i} Data={course} />
           ))
         }
       </ScrollView>
 
       {/* Tabel Section */}
+      <Text className='text-sm font-bold'>NEAR TO EXPIRE</Text>
       <View className="bg-white p-2 rounded">
-        <TabelSection Data={data?.subscriptions?.[0]?.members} />
+        <TabelSection />
       </View>
 
 

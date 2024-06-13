@@ -4,10 +4,9 @@ import DataTable from '../DataTable'
 import { headerApi } from '../../utility/headerApi'
 import axios from 'axios'
 
-const TabelSection = ({Data}) => {
+const TabelSection = () => {
 
-
-  const [data, setData] = useState([])
+const [data, setData] = useState([])
 
     const Heading = [
         {label: "No", item: 'idx', width: 40},
@@ -18,37 +17,38 @@ const TabelSection = ({Data}) => {
 
     
 
-    // useEffect(()=>{
-    //   try{
+    useEffect(()=>{
+      try{
     
-    //    const a = async ()=>{
+       const a = async ()=>{
      
-    //      const { companyId, endPoint, headers } = await headerApi();
-    //      const response = await axios.get(`${endPoint}/recent_members_dash/${companyId}`, headers);
-    //      setData([...response?.data?.data?.nearExpiry])
-    //     }
+         const { companyId, endPoint, headers } = await headerApi();
+         const response = await axios.get(`${endPoint}/recent_members_dash/${companyId}`, headers);
+         setData([...response?.data?.data?.nearExpiry])
+        }
     
-    //     a()
-    //   }catch(e){
-    //     Alert.alert(
-    //       'Something went wrong',
-    //         'Unable fertch data. retry again!',
-    //         [
-    //           {
-    //             text: 'OK',
-    //             onPress: () => setLoadAgain(ld=>!ld),
-    //           },
-    //         ],
-    //         { cancelable: false }
-    //       )
-    //   }
+        a()
+      }catch(e){
+        Alert.alert(
+          'Something went wrong',
+            'Unable fertch data. retry again!',
+            [
+              {
+                text: 'OK',
+                onPress: () => setLoadAgain(ld=>!ld),
+              },
+            ],
+            { cancelable: false }
+          )
+      }
     
-    // },[])
+    },[])
+
   return (
     <ScrollView horizontal>
       <View >
 
-      <DataTable Heading={Heading} Data={Data} maxRow={10} />
+      <DataTable Heading={Heading} Data={data} maxRow={10} />
       </View>
     </ScrollView>
   )

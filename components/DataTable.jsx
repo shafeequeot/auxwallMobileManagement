@@ -1,8 +1,14 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import { useEffect, useState } from 'react'
 import moment from 'moment'
 
 const DataTable = ({ Heading = [], Data = [], maxRow = 10 }) => {
+    const [datas, setData] = useState([])
+
+    useEffect(()=>{
+       Data && setData([...Data])
+    },[Data])
+
     return (
         <View>
             <View className="flex flex-row bg-blue-100 items-center p-2">
@@ -15,7 +21,7 @@ const DataTable = ({ Heading = [], Data = [], maxRow = 10 }) => {
             </View>
             <View>
                 {
-                    Data?.map((data, idx)=>(
+                    datas?.map((data, idx)=>(
                         maxRow > idx &&
                         <View key={idx} className="flex flex-row border-b border-b-blue-50">
                             {
