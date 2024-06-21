@@ -6,7 +6,7 @@ const Currency = ({Amount=0, Symbol = true, Negative = true, ClassName=""}) => {
 
   return (
     <View>
-      <Text className={ClassName}>{currency(Amount, 
+      <Text style={ClassName}>{currency(Amount, 
       {symbol: Symbol ? 'AED' : "", pattern: '# !', negativePattern: Negative ? '-# !' : '# !', precision: 2, 
 }).format()}</Text>
     </View>

@@ -1,11 +1,11 @@
 import { View, Text, TextInput, StyleSheet } from 'react-native'
-import React from 'react'
+import color  from '../utility/color'
 
 const InputTextFeild = ({label, onChange, placeHolder, value, password=false, disabled=true}) => {
   return (
     <View>
-      <Text className="text-gray-400 text-xs">{label}</Text>
-      <TextInput className="border border-gray-200 p-1 rounded focus:border-blue-200 text-xs w-full" 
+      <Text style={styles.label}>{label}</Text>
+      <TextInput style={styles.inputTextField} 
       onChangeText={onChange} 
       placeholder={placeHolder} 
       value={value}
@@ -17,6 +17,20 @@ const InputTextFeild = ({label, onChange, placeHolder, value, password=false, di
   )
 }
 
+const styles = StyleSheet.create({
 
+inputTextField: {
+ 
+    borderRadius: 4,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: color.lightGray,
+    marginBottom: 4,
+  },
+  label: {
+    color: color.text,
+    fontSize: 14
+  }
+})
 
 export default InputTextFeild

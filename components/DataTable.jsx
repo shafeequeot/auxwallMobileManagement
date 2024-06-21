@@ -1,6 +1,7 @@
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { useEffect, useState } from 'react'
 import moment from 'moment'
+import color from '../utility/color'
 
 const DataTable = ({ Heading = [], Data = [], maxRow = 10 }) => {
     const [datas, setData] = useState([])
@@ -11,10 +12,10 @@ const DataTable = ({ Heading = [], Data = [], maxRow = 10 }) => {
 
     return (
         <View>
-            <View className="flex flex-row bg-blue-100 items-center p-2">
+            <View style={styles.headerRow}>
                 {
                     Heading?.map((heading, idx) => (
-                        <Text key={idx} style={{ width: heading?.width }} className="font-bold">{heading?.label}</Text>
+                        <Text key={idx} style={{ width: heading?.width, fontWeight: 'bold' }}>{heading?.label}</Text>
                     ))
                 }
 
@@ -23,15 +24,15 @@ const DataTable = ({ Heading = [], Data = [], maxRow = 10 }) => {
                 {
                     datas?.map((data, idx)=>(
                         maxRow > idx &&
-                        <View key={idx} className="flex flex-row border-b border-b-blue-50">
+                        <View key={idx} style={styles.dataRow}>
                             {
                                 Heading?.map((hd, id)=>(
                                     hd?.item == 'idx' ? 
-                                    <Text style={{ width: hd?.width }} className="p-2 text-xs" key={id}>{idx+1}</Text>
+                                    <Text style={[{ width: hd?.width, fontSize: 12 }]}  key={id}>{idx+1}</Text>
                                     : hd?.type=='date' ? 
-                                    <Text style={{ width: hd?.width }} className="p-2 text-xs" key={id}>{moment(data[`${hd.item}`]).isValid() ? moment(data[`${hd.item}`]).format("DD-MM-YYYY") : ''}</Text>
+                                    <Text style={{ width: hd?.width, fontSize: 12 }}  key={id}>{moment(data[`${hd.item}`]).isValid() ? moment(data[`${hd.item}`]).format("DD-MM-YYYY") : ''}</Text>
                                     : 
-                                    <Text style={{ width: hd?.width }} className="p-2 text-xs" key={id}>{data[`${hd.item}`]}</Text>
+                                    <Text style={{ width: hd?.width, fontSize: 12 }}  key={id}>{data[`${hd.item}`]}</Text>
                                 ))
                             }
                         </View>
@@ -42,5 +43,26 @@ const DataTable = ({ Heading = [], Data = [], maxRow = 10 }) => {
         </View>
     )
 }
+
+
+const styles = StyleSheet.create({
+    headerRow: {
+      flexDirection: 'row',
+      backgroundColor: '#BFDBFE', 
+      alignItems: 'center',
+      padding: 8, 
+      gap: 4,
+    },
+    dataRow: {
+      flexDirection: 'row',
+      borderBottomWidth: 1, 
+      borderBottomColor: color.lightGray, 
+      alignItems: 'center',
+      padding: 8, 
+      gap: 4,
+     
+    },
+
+  });
 
 export default DataTable

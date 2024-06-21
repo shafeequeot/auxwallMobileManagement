@@ -1,7 +1,7 @@
-import { View, Text, ScrollView, RefreshControl, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, RefreshControl, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { color } from '../utility/color';
+import  color  from '../utility/color';
 import Card from '../components/Card';
 import { Ionicons } from '@expo/vector-icons';
 import {  getStorage, setStorage } from '../components/Storage';
@@ -32,7 +32,7 @@ const Club = () => {
         if (err.message === 'Request failed with status code 401') {
           sessionExpired();
         } else {
-          console.log('Error:', err.message);
+          console.log('club:', err.message);
         }
       } finally {
         setLoading(false);
@@ -48,27 +48,27 @@ const Club = () => {
     await setStorage({key: "companyId",  value: e})
   }
   return (
-    <SafeAreaView  className="p-4 space-y-3">
+    <SafeAreaView  style={styles.safeArea}>
       
-     <Text className="text-xs text-gray-500">Hi {user?.userName?.toString()}</Text>
-     <Text className="font-bold text-center">YOUR CLUBS ARE</Text>
+     <Text style={styles.greetingText}>Hi {user?.userName?.toString()}</Text>
+     <Text style={[styles.titleText, {marginTop: 12}]}>YOUR CLUBS ARE</Text>
      <ScrollView refreshControl={
           <RefreshControl
             onRefresh={()=>setLoadAgain(!loadAgain)}
             refreshing={loading}
           />
-        } className="mt-4 flex flex-col gap-3">
+        } contentContainerStyle={styles.scrollViewContent}>
           {
             clubs?.map(club=>(
               <TouchableOpacity key={club?.id} onPress={()=>clubHandle(club.id)}>
 
               <Card >
-                <View className="flex flex-row items-center gap-2 ">
+                <View style={styles.cardContent}>
 
                 <Ionicons name='business' color={color.primary} size={32} />
-                <View className="w-3/4">
-                <Text className="font-bold uppercase">{club?.companyName}</Text>
-                <Text className="text-xs text-gray-400" numberOfLines={1} > 
+                <View style={styles.clubInfo}>
+                <Text style={styles.clubName}>{club?.companyName}</Text>
+                <Text style={styles.clubDetails} numberOfLines={1} > 
                 {club?.branchName && <>Branch: {club?.branchName}, </>} 
                 {club?.emirate && <>Emirates: {club?.emirate}, </>} 
                 {club?.Street && <>Street: {club?.Street}, </>} 
@@ -90,4 +90,40 @@ const Club = () => {
   )
 }
 
+const styles = StyleSheet.create({
+  safeArea: {
+    padding: 16,
+  },
+  greetingText: {
+    fontSize: 12,
+    color: color.text, 
+  },
+  titleText: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  scrollViewContent: {
+    marginTop: 16,
+  },
+  cardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: color.white,
+    padding: 8,
+    borderRadius: 4,
+    height: 80
+  },
+  clubInfo: {
+    width: '75%',
+  },
+  clubName: {
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+  },
+  clubDetails: {
+    fontSize: 12,
+    color: color.text, 
+  },
+});
 export default Club

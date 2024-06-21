@@ -1,9 +1,10 @@
-import { View, Button, Text, BackHandler, TouchableOpacity } from 'react-native'
+import { View, Button, Text, BackHandler, TouchableOpacity, StyleSheet, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import InputTextFeild from '../components/InputTextFeild'
 import Card from '../components/Card'
 import { getStorage, removeStorage, setStorage } from '../components/Storage'
 import sessionExpired from '../components/errorHandle'
+import color from '../utility/color'
 
 const Config = ({ setConfig = false }) => {
   const [data, setData] = useState("")
@@ -39,28 +40,22 @@ const Config = ({ setConfig = false }) => {
   }, [])
 
   return (
-    <View className="flex flex-row justify-center items-center h-full p-8">
+    <View style={styles.container}>
       <Card>
-        <View className="w-full flex flex-col gap-4 items-center">
-
-
-          {/* form area */}
-          <View className=" w-full space-y-3">
-
-            <InputTextFeild
+        <View style={styles.cardContent}>
+          {/* Form area */}
+          <View style={styles.formArea}>
+          <InputTextFeild
               label="End point"
               placeHolder={"End point URI"}
               onChange={(e) => setData(e)}
               value={data}
               disabled={!setConfig ? false : true}
             />
-
-            <View>
-              {formResult.err && <Text className={`${formResult.err ? "text-red-500" : "text-green-500"} text-sm`}>{formResult?.msg?.toString()}</Text>}
-              <Button onPress={handleSubmit} title={setConfig ? 'Save' : 'Remove'} />
-            </View>
+            {formResult.err && <Text style={[styles.errorMessage, { color: formResult.err ? 'red' : 'green' }]}>{formResult.msg}</Text>}
+            <Button onPress={handleSubmit} title={setConfig ? 'Save' : 'Remove'} />
             <TouchableOpacity onPress={logoutHandle}>
-              <Text className="text-xs text-gray-500 mt-3 text-right">Logout?</Text>
+              <Text style={[styles.logoutText, {marginTop: 22}]}>Logout?</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -69,4 +64,36 @@ const Config = ({ setConfig = false }) => {
   )
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 8,
+  },
+  cardContent: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  formArea: {
+    width: 300,
+    marginTop: 8,
+    backgroundColor: color.white,
+    marginBottom: 8,
+    padding: 8,
+  },
+ 
+  errorMessage: {
+    fontSize: 14,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  logoutText: {
+    fontSize: 12,
+    color: 'gray',
+    marginTop: 10,
+    textAlign: 'right',
+  },
+});
 export default Config

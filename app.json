@@ -27,7 +27,7 @@
         "backgroundColor": "#2f3241"
       },
       "package": "com.auxwall.gymapp",
-      "versionCode": 2
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png"

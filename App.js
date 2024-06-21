@@ -7,7 +7,7 @@ import Login from './screens/Login';
 import Config from './screens/Config';
 import { getStorage, setStorage } from './components/Storage';
 import { Ionicons } from '@expo/vector-icons';
-import { color } from './utility/color';
+import  color  from './utility/color';
 import Club from './screens/Clubs';
 import { StatusBar } from 'react-native';
 
@@ -23,11 +23,15 @@ export default function App() {
       if (res && !endPoint) setEndPoint(res);
       else if (!res && endPoint) setStorage({ key: 'endPoint', value: endPoint });
       else if (res && endPoint && res !== endPoint) setStorage({ key: 'endPoint', value: endPoint });
-    });
+    }).catch(err=>{
+      console.log(err)
+    })
 
     Promise.all([getStorage('accessToken'), getStorage('userName')]).then((res) => {
       if (res[0]) setUser(res[1]);
-    });
+    }).catch(err=>{
+      console.log('login', err)
+    })
   }, []);
 
   const setEndPointCallback = useCallback((value) => {

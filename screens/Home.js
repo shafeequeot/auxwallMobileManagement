@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity, RefreshControl, Alert } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, RefreshControl, Alert, StyleSheet } from 'react-native'
 import { useEffect, useState } from 'react'
 import RevenueCard from '../components/home/RevenueCard'
 import WalletCard from '../components/home/WalletCard'
@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons'
 import moment from 'moment'
 import { headerApi } from '../utility/headerApi';
 import axios from 'axios'
+import color from '../utility/color'
 
 const HomeScreen = ({ navigation }) => {
 
@@ -26,14 +27,14 @@ const HomeScreen = ({ navigation }) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-  
+
         const { companyId, endPoint, headers } = await headerApi();
         let response
-        if(companyId) response = await axios.get(`${endPoint}/dashboard/${companyId}/${month}`, headers);
+        if (companyId) response = await axios.get(`${endPoint}/dashboard/${companyId}/${month}`, headers);
         else throw new Error("choose a club from club feild")
         const responseData = response?.data?.data || {};
         setData({ ...responseData });
-       
+
       } catch (error) {
         Alert.alert(
           'Please try again!',
@@ -42,7 +43,7 @@ const HomeScreen = ({ navigation }) => {
             {
               text: 'Reload',
               onPress: () => setLoadAgain(ld => !ld),
-            
+
             }, {
               text: 'Ok',
               onPress: () => {
@@ -57,7 +58,7 @@ const HomeScreen = ({ navigation }) => {
         setLoading(false);
       }
     };
-  
+
     fetchData();
 
   }, [loadAgain, month])
@@ -68,12 +69,12 @@ const HomeScreen = ({ navigation }) => {
         onRefresh={() => setLoadAgain(!loadAgain)}
         refreshing={loading}
       />
-    } className="m-3 space-y-2">
+    } contentContainerStyle={styles.scrollViewContainer}>
 
-      <View className="flex items-center bg-white p-2 rounded">
+      <View style={styles.datePickerContainer}>
 
         {/* Date picker */}
-        <View className="flex flex-row items-center gap-2 ">
+        <View style={styles.datePicker}>
           <TouchableOpacity onPress={() => dateHandle("less")}><Ionicons size={22} name='arrow-back' /></TouchableOpacity>
           <Text>{moment(month, "MM-YYYY").format("MMM-YYYY")}</Text>
           <TouchableOpacity onPress={() => dateHandle("add")}><Ionicons size={22} name='arrow-forward' /></TouchableOpacity>
@@ -82,7 +83,7 @@ const HomeScreen = ({ navigation }) => {
 
 
       {/* revenue , expense, PnL */}
-      <ScrollView horizontal={true} className="space-x-2">
+      <ScrollView horizontal={true} contentContainerStyle={styles.horizontalScrollView}>
         <View>
           <RevenueCard Title="Revenue" Amount={data?.currentMonthIncome} />
         </View>
@@ -99,7 +100,7 @@ const HomeScreen = ({ navigation }) => {
 
 
       {/* Cash in hand and bank */}
-      <ScrollView horizontal={true} className="space-x-3 bg-white p-2 rounded">
+      <ScrollView horizontal={true} contentContainerStyle={styles.cashInHandScrollView}>
         <View>
           <WalletCard Label="Cash in Hand" Amount={data?.inCash} />
         </View>
@@ -110,23 +111,23 @@ const HomeScreen = ({ navigation }) => {
 
       {/* Current date income and expense */}
       <ScrollView>
-        <View className="flex flex-row  space-x-2 text-xs">
-          <View className="flex-1">
+        <View style={styles.todaysIncomeContainer}>
+          <View style={styles.flexItem}>
 
-            <TodaysIncome Title="TODAY'S COLLECTIONS" BgColor='bg-indigo-500' Amount={data?.currentDateIncome} />
+            <TodaysIncome Title="TODAY'S COLLECTIONS" BgColor='#6366F1' Amount={data?.currentDateIncome} />
 
           </View>
-          <View className="flex-1">
+          <View style={styles.flexItem}>
 
-            <TodaysIncome Title="TODAY'S PAYMENTS" BgColor='bg-blue-500' Amount={data?.currentDateExpense} />
+            <TodaysIncome Title="TODAY'S PAYMENTS" BgColor='#3B82F6' Amount={data?.currentDateExpense} />
           </View>
         </View>
       </ScrollView>
 
       {/* total nos course joint */}
-      <Text className='text-sm font-bold'>ACTIVE MEMBERS</Text>
+      <Text style={styles.activeMembersText}>ACTIVE MEMBERS</Text>
 
-      <ScrollView horizontal={true} className="bg-white p-2 rounded">
+      <ScrollView horizontal={true} contentContainerStyle={styles.activeMembersScrollView}>
         {
           data?.activeSubscriptions?.map((course, i) => (
             <CourseCount key={i} Data={course} />
@@ -135,8 +136,8 @@ const HomeScreen = ({ navigation }) => {
       </ScrollView>
 
       {/* Tabel Section */}
-      <Text className='text-sm font-bold'>NEAR TO EXPIRE</Text>
-      <View className="bg-white p-2 rounded">
+      <Text style={styles.nearToExpireText}>NEAR TO EXPIRE</Text>
+      <View style={styles.tableSectionContainer}>
         <TabelSection />
       </View>
 
@@ -144,6 +145,64 @@ const HomeScreen = ({ navigation }) => {
     </ScrollView>
   )
 }
+
+
+const styles = StyleSheet.create({
+  scrollViewContainer: {
+    margin: 12,
+  },
+  datePickerContainer: {
+    backgroundColor: color.white,
+    padding: 8,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  datePicker: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  horizontalScrollView: {
+    marginVertical: 8,
+    paddingHorizontal: 4,
+  },
+  cashInHandScrollView: {
+    backgroundColor: color.white,
+    padding: 8,
+    borderRadius: 8,
+    marginVertical: 8,
+    width: '100%'
+  },
+  todaysIncomeContainer: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  flexItem: {
+    flex: 1,
+  },
+  activeMembersText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginTop: 8,
+  },
+  activeMembersScrollView: {
+    backgroundColor: color.white,
+    padding: 8,
+    borderRadius: 8,
+    marginVertical: 8,
+  },
+  nearToExpireText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginTop: 8,
+  },
+  tableSectionContainer: {
+    backgroundColor: color.white,
+    padding: 8,
+    borderRadius: 8,
+    marginVertical: 8,
+  },
+});
 
 export default HomeScreen
 

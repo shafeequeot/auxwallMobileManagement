@@ -1,7 +1,8 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useEffect, useState } from 'react'
 import Popup from '../Popup'
 import CourseList from './CourseList'
+import color from '../../utility/color'
 
 const CourseCount = ({ Data }) => {
  
@@ -33,13 +34,13 @@ const CourseCount = ({ Data }) => {
 
     <TouchableOpacity onPress={()=>setPopup(true)}>
 
-      <View className="flex flex-col items-center mr-3">
-        <View className={` p-2 rounded-full h-20 w-20 flex border-2 border-gray-700 justify-center items-center `}>
+      <View style={styles.column}>
+        <View style={styles.circleContainer}>
           {/* <View style={{backgroundColor: Color}} className={` p-2 rounded-full h-20 w-20 flex justify-center items-center `}> */}
-          <Text className="text-lg font-bold text-gray-700">{counts?.activeMembers}</Text>
-          <Text className="absolute top-1 -right-2 bg-yellow-400 text-gray-700 p-1 rounded" style={{ fontSize: 10 }}>{counts?.currentMonthJoins} new</Text>
+          <Text style={styles.activeMembersText}>{counts?.activeMembers}</Text>
+          <Text style={styles.newMembersText} >{counts?.currentMonthJoins} new</Text>
         </View>
-        <Text className="text-xs">{Data?.name}</Text>
+        <Text style={styles.dataName}>{Data?.name}</Text>
       </View>
     </TouchableOpacity>
     {
@@ -49,5 +50,44 @@ const CourseCount = ({ Data }) => {
     
   )
 }
+
+
+const styles = StyleSheet.create({
+  column: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginRight: 12, 
+  },
+  circleContainer: {
+    padding: 8, 
+    borderRadius: 9999, 
+    height: 80, 
+    width: 80, 
+    flexDirection: 'column',
+    borderColor: color.primary, 
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  activeMembersText: {
+    fontSize: 18, 
+    fontWeight: 'bold', 
+    color: color.primary, 
+  },
+  newMembersText: {
+    position: 'absolute',
+    top: 4, 
+    right: -8, 
+    backgroundColor: '#FBBF24', 
+    color: '#374151', 
+    padding: 4, 
+    borderRadius: 4, 
+    fontSize: 10,
+  },
+  dataName: {
+    fontSize: 12,
+  },
+});
 
 export default CourseCount

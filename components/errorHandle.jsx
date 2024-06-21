@@ -9,7 +9,7 @@ try{
       removeStorage('userName'),
       removeStorage('companyId'),  
   ])
-}catch(er){console.log(er)}
+}catch(er){console.log('errorhandle', er)}
 
 
     Alert.alert(
